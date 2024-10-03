@@ -21,9 +21,9 @@ public:
 	AAuraPlayerController();
 
 protected:
-	virtual void BeginPlay() override;
-
 	virtual void SetupInputComponent() override;
+
+	virtual void BeginPlay() override;
 
 private:
 	void Move(const FInputActionValue& InputActionValue);

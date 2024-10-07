@@ -8,6 +8,7 @@
 
 class UInputMappingContext;
 class UInputAction;
+class IEnemyInterface;
 struct FInputActionValue;
 
 
@@ -20,6 +21,8 @@ class AURA_API AAuraPlayerController : public APlayerController
 public:
 	AAuraPlayerController();
 
+	virtual void PlayerTick(float DeltaTime) override;
+
 protected:
 	virtual void SetupInputComponent() override;
 
@@ -28,6 +31,8 @@ protected:
 private:
 	void Move(const FInputActionValue& InputActionValue);
 
+	void CursorTrace();
+
 
 private:
 	UPROPERTY(EditAnywhere, Category="Input")
@@ -35,4 +40,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> MoveAction;
+
+	TScriptInterface<IEnemyInterface> LastActor;
+	TScriptInterface<IEnemyInterface> ThisActor;
 };

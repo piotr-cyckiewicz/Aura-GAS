@@ -11,6 +11,7 @@ AAuraEnemy::AAuraEnemy()
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+	
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributesSet");
 }
 
@@ -35,6 +36,8 @@ void AAuraEnemy::UnHighlightActor()
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 
 	// Set custom depth stencil value of the mesh to the same as in PP_Highlight material
 	// This, along with SetRenderCustomDepth(true) enables drawing outlines

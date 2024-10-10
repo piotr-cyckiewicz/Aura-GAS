@@ -47,9 +47,27 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 
 void AAuraPlayerController::CursorTrace()
 {
-	FHitResult CursorHit;
-	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, CursorHit);
-	if (!CursorHit.bBlockingHit) return;
+	//2 traces for 2 channels, cause we want to also include capsule
+	FHitResult CursorHitVis;
+	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, CursorHitVis);
+	FHitResult CursorHitPawn;
+	GetHitResultUnderCursor(ECollisionChannel::ECC_Pawn, false, CursorHitPawn);
+	
+
+	// * DECIDING WHICH LINETRACE TO USE
+	if (!CursorHitVis.bBlockingHit && !CursorHitPawn.bBlockingHit) return;
+
+	FHitResult& CursorHit = CursorHitVis;
+
+	//if both traces succeed, we use the shorter one
+	if (CursorHitVis.bBlockingHit && CursorHitPawn.bBlockingHit) {
+		if (CursorHitVis.Distance > CursorHitPawn.Distance) CursorHit = CursorHitPawn;
+	}
+	else if (CursorHitPawn.bBlockingHit) {
+		CursorHit = CursorHitPawn;
+	}
+	// * END DECIDING WHICH LINETRACE TO USE
+
 
 	LastActor = ThisActor;
 	ThisActor = CursorHit.GetActor();

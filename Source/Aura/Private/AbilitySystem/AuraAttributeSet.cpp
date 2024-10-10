@@ -6,7 +6,10 @@
 #include "Net/UnrealNetwork.h"
 
 UAuraAttributeSet::UAuraAttributeSet() {
-
+	InitMaxHealth(100);
+	InitHealth(100);
+	InitMaxMana(50);
+	InitMana(50);
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

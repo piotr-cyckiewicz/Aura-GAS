@@ -20,8 +20,8 @@ void AAuraEnemy::HighlightActor()
 	GetMesh()->SetRenderCustomDepth(true);
 	WeaponMesh->SetRenderCustomDepth(true);
 
-	FString Log = GetActorNameOrLabel() + TEXT(" highlighted");
-	UE_LOG(LogTemp, Display, TEXT("%s"), * Log);
+	//FString Log = GetActorNameOrLabel() + TEXT(" highlighted");
+	//UE_LOG(LogTemp, Display, TEXT("%s"), * Log);
 }
 
 void AAuraEnemy::UnHighlightActor()
@@ -29,8 +29,8 @@ void AAuraEnemy::UnHighlightActor()
 	GetMesh()->SetRenderCustomDepth(false);
 	WeaponMesh->SetRenderCustomDepth(false);
 
-	FString Log = GetActorNameOrLabel() + TEXT(" unhighlighted");
-	UE_LOG(LogTemp, Display, TEXT("%s"), *Log);
+	//FString Log = GetActorNameOrLabel() + TEXT(" unhighlighted");
+	//UE_LOG(LogTemp, Display, TEXT("%s"), *Log);
 }
 
 void AAuraEnemy::BeginPlay()

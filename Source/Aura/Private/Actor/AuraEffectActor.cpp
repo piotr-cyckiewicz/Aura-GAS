@@ -32,12 +32,30 @@ bool AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	return true;
 }
 
-void AAuraEffectActor::OnOverlap(AActor* TargetActor)
+bool AAuraEffectActor::OnOverlap(AActor* TargetActor)
 {
-
+	bool bEffectApplied = false;
+	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap) {
+		if(ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass))
+			bEffectApplied = true;
+	}
+	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap) {
+		if(ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass))
+			bEffectApplied = true;
+	}
+	return bEffectApplied;
 }
 
-void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
+bool AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 {
-
+	bool bEffectApplied = false;
+	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap) {
+		if(ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass))
+			bEffectApplied = true;
+	}
+	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap) {
+		if(ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass))
+			bEffectApplied = true;
+	}
+	return bEffectApplied;
 }

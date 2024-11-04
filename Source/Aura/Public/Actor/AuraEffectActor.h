@@ -24,6 +24,18 @@ enum class EEffectRemovalPolicy : uint8 {
 	DoNotRemove
 };
 
+USTRUCT(BlueprintType)
+struct FEffectPolicyPair
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
+	EEffectApplicationPolicy ApplicationPolicy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
+	EEffectRemovalPolicy RemovalPolicy;
+};
+
 UCLASS()
 class AURA_API AAuraEffectActor : public AActor
 {
@@ -45,26 +57,23 @@ protected:
 	bool OnEndOverlap(AActor* TargetActor);
 
 	bool RemoveEffectFromTarget(AActor* TargetActor);
+
+	UFUNCTION(BlueprintCallable)
+	EEffectApplicationPolicy GetApplicationPolicy(TSubclassOf<UGameplayEffect> GameplayEffect);
+	UFUNCTION(BlueprintCallable)
+	EEffectRemovalPolicy GetRemovalPolicy(TSubclassOf<UGameplayEffect> GameplayEffect);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
 	bool bDestroyOnEffectRemoval = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
-	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
-	EEffectApplicationPolicy InstantEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
+	TMap<TSubclassOf<UGameplayEffect>, EEffectApplicationPolicy> InstantGameplayEffects;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
-	TSubclassOf<UGameplayEffect> DurationGameplayEffectClass;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
-	EEffectApplicationPolicy DurationEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
+	TMap<TSubclassOf<UGameplayEffect>, EEffectApplicationPolicy> DurationGameplayEffects;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
-	TSubclassOf<UGameplayEffect> InfiniteGameplayEffectClass;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
-	EEffectApplicationPolicy InfiniteEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
-	EEffectRemovalPolicy InfiniteEffectRemovalPolicy = EEffectRemovalPolicy::RemoveOnEndOverlap;
+	TMap<TSubclassOf<UGameplayEffect>, FEffectPolicyPair> InfiniteGameplayEffects;
 	
 	TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> ActiveEffectHandles;
 };

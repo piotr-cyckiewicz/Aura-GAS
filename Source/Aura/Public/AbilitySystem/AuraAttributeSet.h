@@ -13,7 +13,28 @@
  GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
  GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+USTRUCT()
+struct FEffectProperties {
+	GENERATED_BODY()
 
+	UPROPERTY()
+	UAbilitySystemComponent* SourceASC = nullptr;
+	UPROPERTY()
+	UAbilitySystemComponent* TargetASC = nullptr;
+	UPROPERTY()
+	AActor* SourceAvatar = nullptr;
+	UPROPERTY()
+	AActor* TargetAvatar = nullptr;
+	UPROPERTY()
+	AController* SourceController = nullptr;
+	UPROPERTY()
+	AController* TargetController = nullptr;
+	UPROPERTY()
+	ACharacter* SourceCharacter = nullptr;
+	UPROPERTY()
+	ACharacter* TargetCharacter = nullptr;
+	FGameplayEffectContextHandle ContextHandle;
+};
 
 
 UCLASS()
@@ -23,11 +44,14 @@ class AURA_API UAuraAttributeSet : public UAttributeSet
 
 public:
 	UAuraAttributeSet();
+
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
+
+	void SetGameplayEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& GameplayEffectProperties);
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category="Vital Attributes")
 	FGameplayAttributeData Health;

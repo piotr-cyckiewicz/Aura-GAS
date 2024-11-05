@@ -2,9 +2,12 @@
 
 
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "GameFramework/Character.h"
 #include "AbilitySystemComponent.h"
 #include "GameplayEffectExtension.h"
 #include "Net/UnrealNetwork.h"
+#include "AbilitySystemBlueprintLibrary.h"
+
 
 UAuraAttributeSet::UAuraAttributeSet() {
 	InitMaxHealth(100);
@@ -47,9 +50,43 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 {
 	Super::PostGameplayEffectExecute(Data);
 
-	if (Data.EvaluatedData.Attribute == GetHealthAttribute()) {
-		//UE_LOG(LogTemp, Display, TEXT("Health from GetHealth(): %f"), GetHealth());
-		//UE_LOG(LogTemp, Display, TEXT("Magnitude: %f"), Data.EvaluatedData.Magnitude);
+	FEffectProperties EffectProperties;
+	SetGameplayEffectProperties(Data, EffectProperties);
+}
+
+void UAuraAttributeSet::SetGameplayEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& GameplayEffectProperties)
+{
+	const FGameplayEffectContextHandle ContextHandle = Data.EffectSpec.GetContext();
+	GameplayEffectProperties.ContextHandle = ContextHandle;
+
+	const auto SourceASC = ContextHandle.GetOriginalInstigatorAbilitySystemComponent();
+	GameplayEffectProperties.SourceASC = SourceASC;
+
+	if (IsValid(SourceASC) && SourceASC->AbilityActorInfo.IsValid() && SourceASC->AbilityActorInfo->AvatarActor.IsValid()) {
+		AActor* SourceAvatar = SourceASC->AbilityActorInfo->AvatarActor.Get();
+		GameplayEffectProperties.SourceAvatar = SourceAvatar;
+
+		AController* SourceController = SourceASC->AbilityActorInfo->PlayerController.Get();
+		if (!SourceController && SourceAvatar) {
+			if (const APawn* Pawn = Cast<APawn>(SourceAvatar)) {
+				SourceController = Pawn->GetController();
+			}
+		}
+		if (SourceController) {
+			GameplayEffectProperties.SourceController = SourceController;
+			ACharacter* SourceCharacter = Cast<ACharacter>(SourceController->GetPawn());
+			GameplayEffectProperties.SourceCharacter = SourceCharacter;
+		}
+	}
+
+	if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid()) {
+		AActor* TargetAvatar = Data.Target.AbilityActorInfo->AvatarActor.Get();
+		GameplayEffectProperties.TargetAvatar = TargetAvatar;
+		AController* TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
+		GameplayEffectProperties.TargetController = TargetController;
+		ACharacter* TargetCharacter = Cast<ACharacter>(TargetAvatar);
+		GameplayEffectProperties.TargetCharacter = TargetCharacter;
+		GameplayEffectProperties.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetAvatar);
 	}
 }
 

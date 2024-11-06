@@ -76,4 +76,7 @@ protected:
 	TMap<TSubclassOf<UGameplayEffect>, FEffectPolicyPair> InfiniteGameplayEffects;
 	
 	TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> ActiveEffectHandles;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
+	float ActorLevel = 1.0f;
 };

@@ -37,10 +37,16 @@ void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	InitAbilityActorInfo();
 
 	// Set custom depth stencil value of the mesh to the same as in PP_Highlight material
 	// This, along with SetRenderCustomDepth(true) enables drawing outlines
 	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 	WeaponMesh->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
+}
+
+void AAuraEnemy::InitAbilityActorInfo()
+{
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }

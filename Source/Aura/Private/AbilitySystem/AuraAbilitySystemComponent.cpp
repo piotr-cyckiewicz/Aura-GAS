@@ -10,5 +10,12 @@ void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 
 void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle EffectHandle)
 {
-	UE_LOG(LogTemp, Display, TEXT("Effect Applied on AuraAbilitySystemComponent"));
+	FGameplayTagContainer TagContainer;
+	EffectSpec.GetAllAssetTags(TagContainer);
+
+	for (const FGameplayTag& Tag : TagContainer) {
+		//TODO: Broadcast the tag to the widget controller
+		FName TagName = Tag.GetTagName();
+		UE_LOG(LogTemp, Display, TEXT("%s"), *TagName.ToString());
+	}
 }

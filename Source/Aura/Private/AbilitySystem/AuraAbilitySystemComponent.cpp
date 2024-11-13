@@ -12,10 +12,11 @@ void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* Ability
 {
 	FGameplayTagContainer TagContainer;
 	EffectSpec.GetAllAssetTags(TagContainer);
+	
+	EffectAssetTags.Broadcast(TagContainer);
 
-	for (const FGameplayTag& Tag : TagContainer) {
-		//TODO: Broadcast the tag to the widget controller
-		FName TagName = Tag.GetTagName();
-		UE_LOG(LogTemp, Display, TEXT("%s"), *TagName.ToString());
-	}
+	//for (const FGameplayTag& Tag : TagContainer) {
+		// FName TagName = Tag.GetTagName();
+		// UE_LOG(LogTemp, Display, TEXT("%s"), *TagName.ToString());
+	//}
 }

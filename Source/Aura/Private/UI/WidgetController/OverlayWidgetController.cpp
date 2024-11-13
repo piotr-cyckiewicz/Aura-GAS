@@ -3,6 +3,7 @@
 
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "AbilitySystem/AuraAttributeSet.h"
+#include <AbilitySystem/AuraAbilitySystemComponent.h>
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
@@ -11,8 +12,6 @@ void UOverlayWidgetController::BroadcastInitialValues()
 	OnMaxHealthChanged.Broadcast(AuraAttributSet->GetMaxHealth());
 	OnManaChanged.Broadcast(AuraAttributSet->GetHealth());
 	OnMaxManaChanged.Broadcast(AuraAttributSet->GetMaxHealth());
-
-	
 }
 
 void UOverlayWidgetController::BindCallbacksToDependencies()
@@ -30,6 +29,16 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		AuraAttributSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
+
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
+		[](const FGameplayTagContainer& AssetTags) {
+			for (const FGameplayTag& AssetTag: AssetTags) {
+				FString TagName = AssetTag.GetTagName().ToString();
+				FString TagMessage = FString::Printf(TEXT("OverlayWidgetController detected GE with %s"), *TagName);
+				GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TagMessage);
+			}
+		}
+	);
 }
 
 void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const

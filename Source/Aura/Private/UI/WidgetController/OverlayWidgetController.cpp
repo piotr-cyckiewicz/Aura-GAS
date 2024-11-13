@@ -31,11 +31,13 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 		AuraAttributSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
 
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
-		[](const FGameplayTagContainer& AssetTags) {
+		[this](const FGameplayTagContainer& AssetTags) {
 			for (const FGameplayTag& AssetTag: AssetTags) {
-				FString TagName = AssetTag.GetTagName().ToString();
+				FString TagName = AssetTag.ToString();
 				FString TagMessage = FString::Printf(TEXT("OverlayWidgetController detected GE with %s"), *TagName);
 				GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TagMessage);
+
+				FUIWidgetRow* Row = GetDatatableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, AssetTag);
 			}
 		}
 	);

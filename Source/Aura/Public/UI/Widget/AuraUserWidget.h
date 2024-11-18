@@ -17,7 +17,13 @@ class AURA_API UAuraUserWidget : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintCallable)
+	void SetPositionInViewportAnchored(FVector2D Position, FVector2D Anchor, bool bRemoveDPIScale = true);
+
+	UFUNCTION(BlueprintCallable)
 	void SetWidgetController(UObject* InWidgetController);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	FVector2D GetWidgetSize();
 
 protected:
 	UPROPERTY(BlueprintReadOnly)

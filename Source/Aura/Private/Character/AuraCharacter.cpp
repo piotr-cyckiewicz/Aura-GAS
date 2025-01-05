@@ -69,4 +69,6 @@ void AAuraCharacter::InitAbilityActorInfo()
 
 
 	AbilitySystemComponent->InitAbilityActorInfo(AuraPlayerState, this);
+
+	InitializePrimaryAttributes();
 }

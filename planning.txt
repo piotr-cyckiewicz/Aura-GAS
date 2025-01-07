@@ -1,0 +1,7 @@
+Standardowe atrybuty - 9-20
+Standardowy damage - 20-30-50
+Standardowy Armor - 8.75-16,5
+armor penetration - 0,1-0,35
+bklock Chance - 0,05-0,25
+crit Chance - 0,03-0,3
+crit damage - 10-50 - wzrasta szybko, potem wolno
